@@ -7,8 +7,7 @@ Created on Wed Apr  3 16:14:37 2019
 
 import numpy as np
 from sklearn import preprocessing
-class GOcmap(object):  
-    Cancer_ce_D=np.zeros(12328)                                 
+class GOcmap(object):                              
     Disease_expression_value=np.zeros(116)
     def  __init__(self,Selectd_module_num,Ess_thr,All_module_num):
         self.SELECTED_MODULE_NUM,self.ESS_THR,self.ALL_MODULE_NUM=Selectd_module_num,Ess_thr,All_module_num
@@ -36,15 +35,23 @@ class GOcmap(object):
         for line in f:
             line=line.strip('\n').strip('\t').split('\t') 
             for index in range(0,len(line)):
-              if not Dicts.has_key(line[index]):          
+              if line[index] not  in Dicts:          
                   Dicts[line[index]]=str(lines_index)
               else:
                   Dicts[line[index]]+=','+str(lines_index)     
             lines_index+=1
         return Dicts
     def Add_Cancell(self):          #Import the cancer cell_line data
-        Cancer_ce_D=np.random.rand(12328)
+        Cancer_ce_D=np.zeros(12328)
+#        Cancer_ce_D=np.random.rand(12328)
+#        return Cancer_ce_D
+        with open('Data/AVE_DMSO_MCF7_ctl_vehicle_ALL h.txt','r') as r:
+            for lines in r:
+                lines=lines.strip('\n').split()
+                for index in range(len(lines)):
+                    Cancer_ce_D[index]=float(lines[index])
         return Cancer_ce_D
+                
     '''
     Add_Base:
         Averaged gene expression data were imported (disease and control groups)
@@ -52,15 +59,19 @@ class GOcmap(object):
     '''
     def Add_Base(self):
             dict1mid={}        
-            Normal=np.random.rand(12328)
-            Disease=np.random.rand(12328)
+            Normal=np.zeros(14477)
+            Disease=np.zeros(14477)
+            with open ('Data/BRCA_cancer_expression.txt', 'r') as cancer:
+                 with open ('Data/BRCA_normal_expression.txt', 'r') as normal:
+                     for index,(lines_cancer,line_normal) in enumerate(zip(cancer,normal)):
+                         Disease[index],Normal[index]=float(lines_cancer.strip('\n')),float(line_normal.strip('\n'))
             for nn in range(self.ALL_MODULE_NUM):
               dict1mid[nn]=[]
-            with open('Data/Genenanme12328.txt', 'r') as gene:  #基因名
+            with open('Data/Disease_gene.txt', 'r') as gene:  #基因名
                 lines_index=0
                 for g in gene:             
                   g=g.strip('\n')
-                  if self.Dicts.has_key(g):
+                  if g in self.Dicts:
                      for s in range(len(self.Dicts[g].split(','))):                                        
                          dict1mid[int(self.Dicts[g].split(',')[s])].append(np.log2(Disease[lines_index]+1)-np.log2(Normal[lines_index]+1))
                   lines_index+=1  
@@ -76,7 +87,7 @@ class GOcmap(object):
                          self.Disease_expression_value[index]=0
     def addgenename(self,Drug_in_D): 
       Drug_expression_value=np.zeros(self.ALL_MODULE_NUM)   
-      with open('Data/Genenanme12328.txt', 'r') as gene:  #基因名
+      with open('Data/Drug_gene.txt', 'r') as gene:  #基因名
          line=0
          dict2mid={}
          for nn in range(self.ALL_MODULE_NUM):
@@ -85,7 +96,7 @@ class GOcmap(object):
              Drug_expression_value[j]=0       
          for g in gene:          
             g=g.strip('\n')
-            if self.Dicts.has_key(g):
+            if g in self.Dicts:
                for s in range(len(self.Dicts[g].split(','))):
                         dict2mid[int(self.Dicts[g].split(',')[s])].append((Drug_in_D[line]-self.Cancer_ce_D[line]))
             line+=1         
@@ -103,7 +114,7 @@ class GOcmap(object):
     def Import_count(self,Dis_drugdict,Dis_drugdict2,Uplist): 
         score=0                                          
         for j in range(len(Uplist)):
-          if Dis_drugdict.has_key(Uplist[j]):
+          if Uplist[j] in Dis_drugdict:
                     score+=Dis_drugdict[Uplist[j]]/(abs(Dis_drugdict2[Uplist[j]]-(j))+1)  
         return score
     def first(self):  
@@ -116,38 +127,44 @@ class GOcmap(object):
         while dist>=0.0000000001:               #Combination disease Imp,modular network with Pagerank algorithm
             ago=temp                              #Then,Sorting the new Imp_value to pick the important 
             temp=0.85*np.dot(self.Cluster_martix,temp)+0.15*self.Disease_expression_value
-            dist=numpy.linalg.norm(ago-temp)
+            dist=np.linalg.norm(ago-temp)
         back=back[np.argsort(-temp)]               
         temp=temp[np.argsort(-temp)]
         Import_list=[]       
         with open('Result.txt','w') as result:
-            back_dc=np.zeros(self.ALL_MODULE_NUM)
-            Dis_drugdict={}    
-            Dis_drugdict2={} 
-            Drug_in_D=np.zeros(12328)       
-            ac=Drug_in_D-self.Cancer_ce_D
-            ac=ac[np.argsort(ac)]  
-            sums=0
-            for index in range(50):                       #Drug expression with Ess filtration
-                   sums+=(abs(ac[index])+abs(ac[12327-index]))
-            if sums<=self.ESS_THR:
-                Drug_expression_value=self.addgenename(Drug_in_D) #Calculate the Imp_value of the drug
-                temp_dc=np.zeros(self.ALL_MODULE_NUM)     
-                for index in range(self.ALL_MODULE_NUM):
-                       temp_dc[index]=1.0/self.ALL_MODULE_NUM
-                       back_dc[index]=index
-                temp_dc=Drug_expression_value
-                back_dc=back_dc[np.argsort(-temp_dc)]             
-                temp_dc=temp_dc[np.argsort(-temp_dc)]       
-                for s in range(self.ALL_MODULE_NUM):                
-                   Dis_drugdict2[back_dc[s]]=s
-                   Dis_drugdict[back_dc[s]]=temp_dc[s]         
-                del Import_list[:]
-                for count in range(self.SELECTED_MODULE_NUM):                        
-                  Import_list.append(float(back[count]))
-                S=self.Import_count(Dis_drugdict,Dis_drugdict2,Import_list)  #Calculate the S between the drug-disease       
-                result.write('disease_name  '+'drug_name  '+str(S)+"        \n")
-
+          with open('Data/AVE_MCF7_Min.txt','r') as disease: 
+                Drug_in_D=np.zeros(12328)    
+                for lines in disease:   
+                      lines=lines.strip('\n').split()
+                      for index in range(1,len(lines)):
+                          Drug_in_D[index-1]=float(lines[index])
+                      back_dc=np.zeros(self.ALL_MODULE_NUM)
+                      Dis_drugdict={}    
+                      Dis_drugdict2={} 
+            
+                      ac=Drug_in_D-self.Cancer_ce_D
+                      ac=ac[np.argsort(ac)]  
+                      sums=0
+                      for index in range(50):                       #Drug expression with Ess filtration
+                           sums+=(abs(ac[index])+abs(ac[12327-index]))
+                      if sums>=self.ESS_THR:
+                            Drug_expression_value=self.addgenename(Drug_in_D) #Calculate the Imp_value of the drug
+                            temp_dc=np.zeros(self.ALL_MODULE_NUM)     
+                            for index in range(self.ALL_MODULE_NUM):
+                                   temp_dc[index]=1.0/self.ALL_MODULE_NUM
+                                   back_dc[index]=index
+                            temp_dc=Drug_expression_value
+                            back_dc=back_dc[np.argsort(-temp_dc)]             
+                            temp_dc=temp_dc[np.argsort(-temp_dc)]       
+                            for s in range(self.ALL_MODULE_NUM):                
+                               Dis_drugdict2[back_dc[s]]=s
+                               Dis_drugdict[back_dc[s]]=temp_dc[s]         
+                            del Import_list[:]
+                            for count in range(self.SELECTED_MODULE_NUM):                        
+                              Import_list.append(float(back[count]))
+                            S=self.Import_count(Dis_drugdict,Dis_drugdict2,Import_list)  #Calculate the S between the drug-disease       
+                            result.write('BRCA '+lines[0]+'  '+str(S)+"        \n")
+        
 
 
           
