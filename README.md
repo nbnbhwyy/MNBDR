@@ -33,7 +33,7 @@ Example:
 55313	 
 29883 
 ```
-__Disease__  --tab delimited, the column are Gene_Entrez, Normal group, Disease group,respective. <br>
+__Disease__  --tab delimited, Expression data of Breast Cancer, the column are Gene_Entrez, Normal group, Disease group,respective. <br>
 Example: 
 ```
 1	0.10158704	0.161963237
