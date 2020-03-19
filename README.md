@@ -23,8 +23,8 @@ Example:
 0	1	0	0
 1	0	1	1
 ```
-__Drug_gene__  --Since Disease Data and drug data often come from different databases, gene's order and number 
-don't usually match, so we provided Drug gene lists for the code to extract the information. <br>
+__Drug_gene__  --Since Disease Data and drug data often come from different databases, gene's order and number <br>
+don't usually match. Therefore, we provide a list of drug genes to facilitate the extraction of drug expression information. <br>
 Example: 
 ```
 5693 
@@ -50,8 +50,8 @@ Example:
 __AVE_MCF7_Min__  --Expression data of Breast Cancer Cell Lines after drug stimulation (treatment group). <br>
 Example: 
 ```
-lamotrigine	-0.31464	0.2192	-0.0083	-0.05618
-glimepiride	0.8858	-0.26607	-0.13603	-0.16573
+lamotrigine -0.31464 0.2192 -0.0083 -0.05618
+glimepiride 0.8858 -0.26607 -0.13603 -0.16573
 ```
 __RUN__ <br> 
 In this test case, we used breast cancer as an example and provided a small data set of drug responses. <br> 
