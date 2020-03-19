@@ -33,7 +33,7 @@ Example:
 55313	 
 29883 
 ```
-__Disease__  --tab delimited, with columns Gene_Entrez, Normal group, Disease group . <br>
+__Disease__  --tab delimited, the column are Gene_Entrez, Normal group, Disease group,respective. <br>
 Example: 
 ```
 1	0.10158704	0.161963237
@@ -64,5 +64,8 @@ BRCA SN-38  45.97034
 BRCA epirubicin  44.385        
 BRCA daunorubicin  40.46897         
 ```
+__Custom dataset__
 You can also apply our method to your Dataset by replacing the data in DATA. <br> 
+For example, you can provide disease data in our format, then you can get scores for new diseases and drugs.<br> 
+Similarly, you can also replace drug data or module network data.<br> 
 <br> If you have any questions,contact the maintainer of this package: HG_Chen 13247702278@163.com
