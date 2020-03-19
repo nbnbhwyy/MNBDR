@@ -44,7 +44,7 @@ Example:
 ```
 __AVE_DMSO_MCF7_ctl_vehicle_ALL h__  --Expression data of Cell Lines after drug stimulation (Control group) (In the test cases, we provide data for breast cancer Cell Lines). Example: 
 ```
-0.07991	0.06652	-0.06172	0.04316	
+0.07991 0.06652 -0.06172 0.04316
 ```
 __AVE_MCF7_Min__  --Expression data of Cell Lines after drug stimulation (treatment group) (In the test cases, we provide data for breast cancer Cell Lines). Example: 
 ```
