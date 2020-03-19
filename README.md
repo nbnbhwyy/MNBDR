@@ -33,7 +33,7 @@ Example:
 55313	 
 29883 
 ```
-__Disease__  --tab delimited, Expression data of Breast Cancer, the column are Gene_Entrez, Normal group, Disease group,respective. <br>
+__Disease__  --tab delimited, Expression data of disease, the column are Gene_Entrez, Normal group, Disease group,respective (In the test cases, we provide data for breast cancer patients). 
 Example: 
 ```
 1	0.10158704	0.161963237
@@ -42,12 +42,12 @@ Example:
 144568	0.197790261	2.093597589
 53947	6.994426346	6.398611842
 ```
-__AVE_DMSO_MCF7_ctl_vehicle_ALL h__  --Expression data of Breast Cancer Cell Lines after drug stimulation (Control group). <br>
+__AVE_DMSO_MCF7_ctl_vehicle_ALL h__  --Expression data of Cell Lines after drug stimulation (Control group)(In the test cases, we provide data for breast cancer Cell Lines). <br>
 Example: 
 ```
 0.07991	0.06652	-0.06172	0.04316	
 ```
-__AVE_MCF7_Min__  --Expression data of Breast Cancer Cell Lines after drug stimulation (treatment group). <br>
+__AVE_MCF7_Min__  --Expression data of Cell Lines after drug stimulation (treatment group) (In the test cases, we provide data for breast cancer Cell Lines). <br>
 Example: 
 ```
 lamotrigine -0.31464 0.2192 -0.0083 -0.05618
