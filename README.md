@@ -42,13 +42,11 @@ Example:
 144568	0.197790261	2.093597589
 53947	6.994426346	6.398611842
 ```
-__AVE_DMSO_MCF7_ctl_vehicle_ALL h__  --Expression data of Cell Lines after drug stimulation (Control group)(In the test cases, we provide data for breast cancer Cell Lines). <br>
-Example: 
+__AVE_DMSO_MCF7_ctl_vehicle_ALL h__  --Expression data of Cell Lines after drug stimulation (Control group) (In the test cases, we provide data for breast cancer Cell Lines). Example: 
 ```
 0.07991	0.06652	-0.06172	0.04316	
 ```
-__AVE_MCF7_Min__  --Expression data of Cell Lines after drug stimulation (treatment group) (In the test cases, we provide data for breast cancer Cell Lines). <br>
-Example: 
+__AVE_MCF7_Min__  --Expression data of Cell Lines after drug stimulation (treatment group) (In the test cases, we provide data for breast cancer Cell Lines). Example: 
 ```
 lamotrigine -0.31464 0.2192 -0.0083 -0.05618
 glimepiride 0.8858 -0.26607 -0.13603 -0.16573
